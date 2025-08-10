@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>可编辑JavaScript课堂笔记系统</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/dracula.min.css">
+    <link rel="stylesheet" href="notes.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <button class="sidebar-toggle" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="header-content">
+                <h1><i class="fas fa-code"></i> 可编辑JavaScript课堂笔记系统</h1>
+                <p class="subtitle">直接在页面上编辑代码和内容，实时运行JavaScript代码</p>
+                
+                <div class="actions">
+                    <button class="btn btn-success" id="newSectionBtn" title="添加新章节 (Ctrl+N)">
+                        <i class="fas fa-plus-circle"></i> 添加新章节
+                    </button>
+                    <button class="btn btn-primary" id="saveBtn" title="保存笔记 (Ctrl+S)">
+                        <i class="fas fa-save"></i> 保存笔记
+                    </button>
+                    <button class="btn btn-info" id="exportBtn" title="导出HTML (Ctrl+E)">
+                        <i class="fas fa-file-export"></i> 导出HTML
+                    </button>
+                    <button class="btn btn-secondary" id="fixCodeBtn">
+                        <i class="fas fa-wrench"></i> 修复代码
+                    </button>
+                    <button class="btn btn-warning" id="resetBtn">
+                        <i class="fas fa-redo"></i> 重置
+                    </button>
+                </div>
+            </div>
+        </header>
+        
+        <div class="content-wrapper">
+            <aside class="sidebar" id="sidebar">
+                <h2>
+                    <i class="fas fa-book"></i> 课程目录
+                    <button class="btn btn-info btn-sm" id="newTocBtn" style="padding: 5px 10px; font-size: 0.9rem;">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </h2>
+                <ul class="toc" id="tocList">
+                    <!-- 目录项将通过JavaScript动态生成 -->
+                </ul>
+            </aside>
+            
+            <main class="main-content" id="mainContent">
+                <!-- 章节内容将通过JavaScript动态生成 -->
+                <div class="empty-state" id="emptyState">
+                    <i class="fas fa-file-alt"></i>
+                    <h3>还没有任何内容</h3>
+                    <p>点击"添加新章节"按钮开始创建您的JavaScript课堂笔记</p>
+                    <button class="btn btn-success" id="addFirstSectionBtn" style="margin-top: 20px;">
+                        <i class="fas fa-plus-circle"></i> 添加第一个章节
+                    </button>
+                </div>
+            </main>
+        </div>
+        
+        <footer>
+            <p>可编辑JavaScript课堂笔记系统 &copy; 2023 | 支持代码编辑、运行和章节管理</p>
+        </footer>
+    </div>
+
+       <!-- 回到顶部按钮 -->
+       <button class="back-to-top" id="backToTopBtn" title="回到顶部 (双击快速滚动)">
+           <i class="fas fa-chevron-up"></i>
+       </button>
+
+    <!-- 引入CodeMirror -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
+    <script src="app.js"></script>
+    
+    <!-- 所有 JavaScript 逻辑已移至 app.js 文件 -->
+</body>
+</html>
+
+
+
+</html>
+
+
+
+</html>
+
