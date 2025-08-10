@@ -884,18 +884,452 @@ function exportHtml() {
   htmlParts.push('<html lang="zh-CN">');
   htmlParts.push('<head>');
   htmlParts.push('<meta charset="UTF-8">');
-  htmlParts.push('<title>JavaScript课堂笔记</title>');
+  htmlParts.push('<title>JavaScript课堂笔记 - ' + new Date().toLocaleDateString() + '</title>');
+  htmlParts.push('<meta name="description" content="JavaScript课堂笔记系统，包含代码示例、运行环境和交互功能">');
+  htmlParts.push('<meta name="keywords" content="JavaScript, 编程, 学习, 代码示例, 课堂笔记">');
   htmlParts.push('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">');
-  htmlParts.push('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">');
+  htmlParts.push('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/dracula.min.css">');
   htmlParts.push('<style>');
-  // 尝试获取外部CSS内容或使用内联样式
-  const styleEl = document.querySelector('style');
-  if (styleEl) {
-    htmlParts.push(styleEl.innerText || '');
-  } else {
-    // 如果没有内联样式，添加基本样式
-    htmlParts.push('body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }');
-  }
+  
+  // 内联完整的CSS样式
+  htmlParts.push(`
+:root {
+    --primary: #4b6cb7;
+    --secondary: #182848;
+    --accent: #ffd700;
+    --light: #f8f9fa;
+    --dark: #2c3e50;
+    --success: #27ae60;
+    --danger: #e74c3c;
+    --warning: #f39c12;
+    --info: #3498db;
+    --border-radius: 8px;
+    --shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+    background-attachment: fixed;
+    color: #333;
+    line-height: 1.6;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.97);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 95vh;
+}
+
+header {
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    color: white;
+    padding: 25px 40px;
+    text-align: center;
+    border-bottom: 4px solid var(--accent);
+    position: relative;
+}
+
+.header-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+h1 {
+    font-size: 2.8rem;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    margin: 0 auto 15px;
+}
+
+.actions {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.btn {
+    background: var(--accent);
+    color: var(--dark);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn i { font-size: 1.1rem; }
+.btn-primary { background: var(--primary); color: white; }
+.btn-success { background: var(--success); color: white; }
+.btn-warning { background: var(--warning); color: white; }
+.btn-info { background: var(--info); color: white; }
+.btn-secondary { background: #6c757d; color: white; }
+.btn-secondary:hover { background: #5a6268; }
+
+.content-wrapper { 
+    display: flex; 
+    flex: 1; 
+    min-height: 75vh; 
+}
+
+.sidebar {
+    width: 280px;
+    background: var(--dark);
+    color: white;
+    padding: 25px 20px;
+    overflow-y: auto;
+    transition: var(--transition);
+}
+
+.sidebar h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--primary);
+    color: var(--accent);
+}
+
+.toc { 
+    list-style: none; 
+}
+
+.toc li {
+    margin: 12px 0;
+    padding-left: 15px;
+    position: relative;
+}
+
+.toc li:before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: var(--primary);
+    font-size: 1.4rem;
+    top: -3px;
+}
+
+.toc a {
+    color: #ecf0f1;
+    text-decoration: none;
+    display: block;
+    padding: 12px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 1.05rem;
+}
+
+.toc a:hover { 
+    background: var(--primary); 
+    color: white; 
+    transform: translateX(5px); 
+}
+
+.toc a.active { 
+    background: var(--primary); 
+    color: white; 
+    font-weight: bold; 
+    border-left: 4px solid var(--accent);
+    transform: translateX(5px);
+    box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
+}
+
+.main-content { 
+    flex: 1; 
+    padding: 30px 40px; 
+    overflow-y: auto; 
+}
+
+.section {
+    margin-bottom: 50px;
+    padding: 25px;
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    border-left: 4px solid var(--primary);
+    transition: var(--transition);
+    position: relative;
+}
+
+.section:hover { 
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12); 
+}
+
+.section h2 { 
+    color: var(--dark); 
+    margin-bottom: 20px; 
+    padding-bottom: 10px; 
+    border-bottom: 2px solid #ecf0f1; 
+    display: flex; 
+    align-items: center; 
+    gap: 12px; 
+}
+
+.section h2 i { 
+    color: var(--primary); 
+    font-size: 1.8rem; 
+}
+
+.section h3 { 
+    color: var(--primary); 
+    margin: 25px 0 15px; 
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+}
+
+.section h3 i { 
+    font-size: 1.3rem; 
+}
+
+.note-box { 
+    background: var(--light); 
+    border-left: 4px solid var(--accent); 
+    padding: 18px; 
+    margin: 20px 0; 
+    border-radius: 0 var(--border-radius) var(--border-radius) 0; 
+}
+
+.code-container { 
+    position: relative; 
+    margin: 25px 0; 
+    border-radius: var(--border-radius); 
+    overflow: hidden; 
+    box-shadow: var(--shadow); 
+}
+
+.code-header { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    background: #1e1e1e; 
+    padding: 10px 15px; 
+    color: #ccc; 
+    font-family: monospace; 
+    font-size: 0.9rem; 
+}
+
+.code-actions { 
+    display: flex; 
+    gap: 10px; 
+}
+
+.copy-code-btn, .run-btn, .clear-output-btn { 
+    background: var(--success); 
+    color: white; 
+    border: none; 
+    padding: 8px 15px; 
+    border-radius: 5px; 
+    cursor: pointer; 
+    font-weight: bold; 
+    transition: var(--transition); 
+    display: flex; 
+    align-items: center; 
+    gap: 5px; 
+}
+
+.copy-code-btn:hover, .run-btn:hover, .clear-output-btn:hover { 
+    background: #2ecc71; 
+    transform: translateY(-2px); 
+}
+
+.run-btn { 
+    background: var(--info); 
+}
+
+.run-btn:hover { 
+    background: #2980b9; 
+}
+
+.clear-output-btn {
+    background: var(--warning);
+}
+
+.clear-output-btn:hover {
+    background: #f39c12;
+}
+
+pre {
+    background: #1e1e1e;
+    color: #f8f8f2;
+    padding: 20px;
+    overflow-x: auto;
+    margin: 0;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+code {
+    background: none;
+    color: inherit;
+    padding: 0;
+}
+
+.output-container { 
+    background: var(--dark); 
+    color: #ecf0f1; 
+    padding: 15px; 
+    border-radius: 0 0 var(--border-radius) var(--border-radius); 
+    margin-top: -5px; 
+    font-family: monospace; 
+    min-height: 60px; 
+    display: none; 
+}
+
+.output-title { 
+    color: var(--accent); 
+    margin-bottom: 10px; 
+    font-weight: bold; 
+    display: flex; 
+    align-items: center; 
+    gap: 8px; 
+}
+
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--success);
+    color: white;
+    padding: 15px 20px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    z-index: 1000;
+    transform: translateX(400px);
+    transition: var(--transition);
+    max-width: 300px;
+}
+
+.notification.show {
+    transform: translateX(0);
+}
+
+.notification.success { background: var(--success); }
+.notification.error { background: var(--danger); }
+.notification.info { background: var(--info); }
+
+.notification .notification-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.back-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: var(--transition);
+    z-index: 1000;
+}
+
+.back-to-top:hover {
+    background: var(--secondary);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+.back-to-top:active {
+    transform: translateY(-1px);
+}
+
+footer { 
+    text-align: center; 
+    padding: 20px; 
+    background: var(--secondary); 
+    color: #ecf0f1; 
+    font-size: 0.9rem; 
+}
+
+@media (max-width: 768px) {
+    .sidebar { 
+        width: 100%; 
+        margin-bottom: 20px; 
+    }
+    
+    .content-wrapper { 
+        flex-direction: column; 
+    }
+    
+    .main-content { 
+        padding: 20px; 
+    }
+    
+    h1 { 
+        font-size: 2.2rem; 
+    }
+    
+    .actions {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .btn {
+        width: 100%;
+        max-width: 300px;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 576px) {
+    header { 
+        padding: 20px 15px; 
+    }
+    
+    h1 { 
+        font-size: 1.8rem; 
+    }
+    
+    .section { 
+        padding: 20px 15px; 
+    }
+}
+  `);
+  
   htmlParts.push('</style>');
   htmlParts.push('</head>');
   htmlParts.push('<body>');
@@ -903,7 +1337,11 @@ function exportHtml() {
   htmlParts.push('<header>');
   htmlParts.push('<div class="header-content">');
   htmlParts.push('<h1><i class="fas fa-code"></i> JavaScript课堂笔记</h1>');
-  htmlParts.push('<p class="subtitle">' + new Date().toLocaleDateString() + '</p>');
+  htmlParts.push('<p class="subtitle">导出时间：' + new Date().toLocaleString() + ' | 包含 ' + notebookData.sections.length + ' 个章节</p>');
+  htmlParts.push('<div class="stats" style="margin-top: 15px; font-size: 0.9rem; opacity: 0.8;">');
+  htmlParts.push('<span style="margin-right: 20px;"><i class="fas fa-code"></i> 代码块：' + (notebookData.sections.reduce((total, section) => total + (section.codeBlocks ? section.codeBlocks.length : 0), 0)) + ' 个</span>');
+  htmlParts.push('<span><i class="fas fa-lightbulb"></i> 注意事项：' + (notebookData.sections.reduce((total, section) => total + (section.notes ? section.notes.length : 0), 0)) + ' 条</span>');
+  htmlParts.push('</div>');
   htmlParts.push('</div>');
   htmlParts.push('</header>');
   htmlParts.push('<div class="content-wrapper">');
@@ -940,10 +1378,11 @@ function exportHtml() {
         }
         htmlParts.push('<div class="code-container">');
         htmlParts.push('<div class="code-header">');
-        htmlParts.push('<span>示例代码</span>');
+        htmlParts.push('<span><i class="fas fa-code"></i> ' + escapeHtml(codeBlock.title || '示例代码') + '</span>');
         htmlParts.push('<div class="code-actions">');
-        htmlParts.push('<button class="copy-code-btn"><i class="fas fa-copy"></i> 复制代码</button>');
-        htmlParts.push('<button class="run-btn"><i class="fas fa-play"></i> 运行代码</button>');
+        htmlParts.push('<button class="copy-code-btn" title="复制代码到剪贴板"><i class="fas fa-copy"></i> 复制代码</button>');
+        htmlParts.push('<button class="run-btn" title="运行JavaScript代码"><i class="fas fa-play"></i> 运行代码</button>');
+        htmlParts.push('<button class="clear-output-btn" title="清除输出结果"><i class="fas fa-trash"></i> 清除输出</button>');
         htmlParts.push('</div>');
         htmlParts.push('</div>');
         htmlParts.push('<pre><code class="javascript">' + escapeHtml(codeBlock.code || '') + '</code></pre>');
@@ -962,12 +1401,21 @@ function exportHtml() {
   htmlParts.push('<p>JavaScript课堂笔记 &copy; ' + new Date().getFullYear() + '</p>');
   htmlParts.push('</footer>');
   htmlParts.push('</div>');
+  htmlParts.push('<!-- 回到顶部按钮 -->');
+  htmlParts.push('<button class="back-to-top" id="backToTopBtn" title="回到顶部" style="position:fixed;bottom:30px;right:30px;background:var(--primary);color:white;border:none;width:50px;height:50px;border-radius:50%;cursor:pointer;display:none;align-items:center;justify-content:center;font-size:1.2rem;box-shadow:0 4px 12px rgba(0,0,0,0.3);transition:all 0.3s ease;z-index:1000;">');
+  htmlParts.push('<i class="fas fa-chevron-up"></i>');
+  htmlParts.push('</button>');
   const scriptTag = '</' + 'script>';
   htmlParts.push('<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js">' + scriptTag);
   htmlParts.push('<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/javascript.min.js">' + scriptTag);
   htmlParts.push('<script>');
   htmlParts.push('document.addEventListener("DOMContentLoaded", () => {');
-  htmlParts.push('  document.querySelectorAll("pre code").forEach(el => window.hljs && hljs.highlightElement(el));');
+  htmlParts.push('  // 代码高亮');
+  htmlParts.push('  if (window.hljs) {');
+  htmlParts.push('    document.querySelectorAll("pre code").forEach(el => {');
+  htmlParts.push('      hljs.highlightElement(el);');
+  htmlParts.push('    });');
+  htmlParts.push('  }');
   htmlParts.push('  ');
   htmlParts.push('  // 复制功能');
   htmlParts.push('  document.querySelectorAll(".copy-code-btn").forEach(btn => {');
@@ -1038,6 +1486,60 @@ function exportHtml() {
   htmlParts.push('      finally { console.log = originalLog; }');
   htmlParts.push('    });');
   htmlParts.push('  });');
+  htmlParts.push('  ');
+  htmlParts.push('  // 清除输出功能');
+  htmlParts.push('  document.querySelectorAll(".clear-output-btn").forEach(btn => {');
+  htmlParts.push('    btn.addEventListener("click", function() {');
+  htmlParts.push('      const container = this.closest(".code-container");');
+  htmlParts.push('      const output = container.querySelector(".output-content");');
+  htmlParts.push('      const outputContainer = container.querySelector(".output-container");');
+  htmlParts.push('      output.innerHTML = "";');
+  htmlParts.push('      outputContainer.style.display = "none";');
+  htmlParts.push('      showNotification("输出已清除", "info");');
+  htmlParts.push('    });');
+  htmlParts.push('  });');
+  htmlParts.push('  ');
+  htmlParts.push('  // 目录导航功能');
+  htmlParts.push('  document.querySelectorAll(".toc a").forEach(link => {');
+  htmlParts.push('    link.addEventListener("click", function(e) {');
+  htmlParts.push('      e.preventDefault();');
+  htmlParts.push('      const targetId = this.getAttribute("href").substring(1);');
+  htmlParts.push('      const targetSection = document.getElementById(targetId);');
+  htmlParts.push('      if (targetSection) {');
+  htmlParts.push('        targetSection.scrollIntoView({ behavior: "smooth" });');
+  htmlParts.push('        // 更新活动状态');
+  htmlParts.push('        document.querySelectorAll(".toc a").forEach(a => a.classList.remove("active"));');
+  htmlParts.push('        this.classList.add("active");');
+  htmlParts.push('      }');
+  htmlParts.push('    });');
+  htmlParts.push('  });');
+  htmlParts.push('  ');
+  htmlParts.push('  // 通知功能');
+  htmlParts.push('  function showNotification(message, type = "info") {');
+  htmlParts.push('    const notification = document.createElement("div");');
+  htmlParts.push('    notification.className = `notification ${type}`;');
+  htmlParts.push('    notification.innerHTML = `<div class="notification-content"><i class="fas fa-info-circle"></i> ${message}</div>`;');
+  htmlParts.push('    document.body.appendChild(notification);');
+  htmlParts.push('    setTimeout(() => notification.classList.add("show"), 100);');
+  htmlParts.push('    setTimeout(() => {');
+  htmlParts.push('      notification.classList.remove("show");');
+  htmlParts.push('      setTimeout(() => notification.remove(), 300);');
+  htmlParts.push('    }, 3000);');
+  htmlParts.push('  }');
+  htmlParts.push('  ');
+  htmlParts.push('  // 回到顶部功能');
+  htmlParts.push('  const backToTopBtn = document.getElementById("backToTopBtn");');
+  htmlParts.push('  window.addEventListener("scroll", () => {');
+  htmlParts.push('    if (window.pageYOffset > 300) {');
+  htmlParts.push('      backToTopBtn.style.display = "flex";');
+  htmlParts.push('    } else {');
+  htmlParts.push('      backToTopBtn.style.display = "none";');
+  htmlParts.push('    }');
+  htmlParts.push('  });');
+  htmlParts.push('  ');
+  htmlParts.push('  backToTopBtn.addEventListener("click", () => {');
+  htmlParts.push('    window.scrollTo({ top: 0, behavior: "smooth" });');
+  htmlParts.push('  });');
   htmlParts.push('});');
   htmlParts.push(scriptTag);
   htmlParts.push('</body>');
@@ -1047,12 +1549,13 @@ function exportHtml() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = 'javascript-notes.html';
+  const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
+  a.download = `javascript-notes-${timestamp}.html`;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
-  showNotification('HTML文件已导出！', 'success');
+  showNotification('HTML文件已导出！文件名：' + a.download, 'success');
 }
 
 function showNotification(message, type) {
